@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can your PC run GTA VI on PC (VIctory)? Free check</title>
+<meta name="description" content="Check in 5 seconds if your PC could boot VIctory, the open source attempt at running GTA VI on PC. Nothing is uploaded or downloaded.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b0a12;color:#ece8f5;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:34px 20px 60px}
+.top{display:flex;justify-content:space-between;font-size:14px;color:#8d86a3}
+.top a{color:#8d86a3;text-decoration:none}
+h1{font-size:46px;line-height:1.05;margin:30px 0 10px;letter-spacing:-1.5px}
+h1 em{font-style:normal;background:linear-gradient(90deg,#ff4fa0,#ffb23d);-webkit-background-clip:text;color:transparent}
+.lead{color:#b9b2cc;font-size:18px;margin:0 0 26px}
+.card{background:#15131f;border:1px solid #2a2638;border-radius:18px;padding:22px;margin-bottom:18px}
+.k{font:12px ui-monospace,Consolas,monospace;letter-spacing:1.5px;color:#8d86a3;text-transform:uppercase;margin-bottom:8px}
+.gpu{font-size:22px;font-weight:700}
+.sub{color:#8d86a3;font-size:14px}
+select,button{font:inherit}
+select{width:100%;margin-top:10px;padding:10px 12px;border-radius:10px;background:#0f0d18;color:#ece8f5;border:1px solid #2f2a40}
+.ram{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.ram button{flex:1;min-width:70px;padding:12px 0;border-radius:12px;border:1.5px solid #2f2a40;background:#0f0d18;color:#ece8f5;font-weight:700;cursor:pointer}
+.ram button.on{border-color:#ffb23d;background:#2a1f10;color:#ffd27a}
+.row{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-top:1px solid #241f33}
+.row:first-of-type{border-top:0}
+.b{flex:none;width:58px;text-align:center;font:800 13px ui-monospace,Consolas,monospace;padding:6px 0;border-radius:8px}
+.ok{background:#123d25;color:#5dff9c}.no{background:#45131f;color:#ff6b88}.mb{background:#3d3110;color:#ffd27a}
+.row b{display:block}
+.why{margin:6px 0 0;padding-left:18px;color:#ffd27a;font-size:15px}
+.note{font-size:14px;color:#8d86a3}
+.note a,.foot a{color:#ffb23d}
+pre{background:#0f0d18;border:1px solid #2f2a40;border-radius:12px;padding:12px;overflow:auto;font:13px ui-monospace,Consolas,monospace;color:#5dff9c;white-space:pre-wrap;word-break:break-all}
+.copy{margin-top:8px;padding:9px 16px;border-radius:10px;border:0;background:#ffb23d;color:#1a1206;font-weight:800;cursor:pointer}
+.warn{border-color:#5a2030;background:#1d0f15}
+.foot{font-size:13px;color:#6f6886;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a href="https://x.com/Cranefomo">@Cranefomo</a><span>free · nothing uploaded</span></div>
+  <h1>Can your PC run<br><em>GTA VI on PC?</em></h1>
+  <p class="lead">A 5 second check against VIctory, the open source project that runs the Xbox version of GTA VI natively on Windows. Based on its README, Nov 25.</p>
+
+  <div class="card">
+    <div class="k">your graphics card</div>
+    <div class="gpu" id="gpuName">detecting...</div>
+    <div class="sub" id="gpuNote"></div>
+    <select id="pick"><option value="">wrong card? pick yours</option></select>
+  </div>
+
+  <div class="card">
+    <div class="k">your RAM (the browser can't see it)</div>
+    <div class="ram" id="ram"></div>
+    <div class="sub" style="margin-top:8px">Not sure? Windows Settings → System → About → Installed RAM</div>
+  </div>
+
+  <div class="card" id="res">
+    <div class="k">verdict</div>
+    <div id="rows"></div>
+  </div>
+
+  <div class="card">
+    <div class="k">want the exact check?</div>
+    <div class="note">The browser guesses from your card's model. This one command reads your real CPU, RAM, page file and DirectX level. Read-only, downloads nothing. Paste it into PowerShell:</div>
+    <pre id="cmd">irm https://raw.githubusercontent.com/Cranefomo/gta6-pc-check/main/check.ps1 | iex</pre>
+    <button class="copy" id="copyBtn">copy</button>
+  </div>
+
+  <div class="card warn">
+    <div class="k" style="color:#ff6b88">careful</div>
+    <div class="note" style="color:#e9c9d2">Never run a "GTA VI PC port" exe from a post, a video or a Discord. That is where the malware is. VIctory ships no game files and is not playable yet.</div>
+  </div>
+
+  <div class="foot">
+    VIctory: <a href="https://github.com/Marvisak/VIctory">github.com/Marvisak/VIctory</a> (GPL-3.0). This page: <a href="https://github.com/Cranefomo/gta6-pc-check">github.com/Cranefomo/gta6-pc-check</a>.<br>
+    Estimates from the card model, no guarantee. Not affiliated with Rockstar Games, Take-Two, Microsoft, NVIDIA, AMD, Intel, Anthropic or the VIctory project.<br>
+    Also: <a href="https://cranefomo.github.io/realfps">realfps</a>, is that clip really 60 fps?
+  </div>
+</div>
+<script>
+// [pattern, label, dx12 ultimate, vram GB]
+const GPUS=[
+ ['RTX\\s*5090','RTX 5090',1,32],['RTX\\s*5080','RTX 5080',1,16],['RTX\\s*5070\\s*Ti','RTX 5070 Ti',1,16],['RTX\\s*5070','RTX 5070',1,12],
+ ['RTX\\s*5060\\s*Ti','RTX 5060 Ti',1,'8 or 16'],['RTX\\s*5060','RTX 5060',1,8],['RTX\\s*5050','RTX 5050',1,8],
+ ['RTX\\s*4090','RTX 4090',1,24],['RTX\\s*4080','RTX 4080 / SUPER',1,16],['RTX\\s*4070\\s*Ti\\s*SUPER','RTX 4070 Ti SUPER',1,16],['RTX\\s*4070','RTX 4070 / Ti / SUPER',1,12],
+ ['RTX\\s*4060\\s*Ti','RTX 4060 Ti',1,'8 or 16'],['RTX\\s*4060','RTX 4060',1,8],
+ ['RTX\\s*3090','RTX 3090 / Ti',1,24],['RTX\\s*3080\\s*Ti','RTX 3080 Ti',1,12],['RTX\\s*3080','RTX 3080',1,'10 or 12'],['RTX\\s*3070','RTX 3070 / Ti',1,8],
+ ['RTX\\s*3060\\s*Ti','RTX 3060 Ti',1,8],['RTX\\s*3060','RTX 3060',1,'8 or 12'],['RTX\\s*3050','RTX 3050',1,'6 or 8'],
+ ['RTX\\s*2080\\s*Ti','RTX 2080 Ti',1,11],['RTX\\s*20[678]0','RTX 2060 / 2070 / 2080',1,'6 to 8'],
+ ['GTX\\s*16','GTX 16 series',0,'4 to 6'],['GTX\\s*10','GTX 10 series',0,'2 to 11'],['GTX\\s*9','GTX 900 series',0,'2 to 6'],
+ ['RX\\s*9070','RX 9070 / XT',1,16],['RX\\s*9060','RX 9060 XT',1,'8 or 16'],
+ ['RX\\s*7900\\s*XTX','RX 7900 XTX',1,24],['RX\\s*7900\\s*XT','RX 7900 XT',1,20],['RX\\s*7900','RX 7900 GRE',1,16],['RX\\s*7800','RX 7800 XT',1,16],
+ ['RX\\s*7700','RX 7700 XT',1,12],['RX\\s*7600\\s*XT','RX 7600 XT',1,16],['RX\\s*7600','RX 7600',1,8],
+ ['RX\\s*69[05]0','RX 6900 / 6950 XT',1,16],['RX\\s*6800','RX 6800 / XT',1,16],['RX\\s*67[05]0','RX 6700 / XT / 6750 XT',1,'10 or 12'],
+ ['RX\\s*66[05]0','RX 6600 / XT / 6650 XT',1,8],['RX\\s*65|RX\\s*64','RX 6400 / 6500 XT',1,4],
+ ['RX\\s*5[0-9]{3}','RX 5000 series',0,'4 to 8'],['RX\\s*[45][0-9]{2}\\b','RX 400 / 500 series',0,'4 to 8'],['Vega','Radeon Vega',0,'up to 8'],
+ ['Arc.*B580','Arc B580',1,12],['Arc.*B570','Arc B570',1,10],['Arc.*A770','Arc A770',1,'8 or 16'],['Arc.*A7[05]0|Arc.*A5','Arc A580 / A750',1,8],['Arc.*A3','Arc A380',1,6],
+ ['Intel.*(UHD|Iris|HD Graphics)','Intel integrated graphics',0,'shared'],['Radeon.*(Graphics|Vega)','AMD integrated graphics',0,'shared'],
+ ['Apple','Apple Silicon (Mac)',0,'shared']
+];
+const $=id=>document.getElementById(id);
+let gpu=null, ram=null;
+function raw(){try{const c=document.createElement('canvas'),g=c.getContext('webgl')||c.getContext('experimental-webgl');const e=g&&g.getExtension('WEBGL_debug_renderer_info');return e?g.getParameter(e.UNMASKED_RENDERER_WEBGL):''}catch(e){return ''}}
+function match(s){for(const g of GPUS){if(new RegExp(g[0],'i').test(s))return {label:g[1],ult:!!g[2],vram:g[3],laptop:/laptop|mobile|max-q/i.test(s)}}return null}
+function vramNum(v){return typeof v==='number'?v:(String(v).match(/(\d+)\s*$/)||[0,0])[1]*1}
+function vramMin(v){return typeof v==='number'?v:(String(v).match(/(\d+)/)||[0,0])[1]*1}
+const isPhone=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const isWin=/Windows/i.test(navigator.userAgent);
+
+GPUS.forEach((g,i)=>{const o=document.createElement('option');o.value=i;o.textContent=g[1];$('pick').appendChild(o)});
+[8,16,32,64].forEach(n=>{const b=document.createElement('button');b.textContent=n+(n==64?'+ GB':' GB');b.onclick=()=>{ram=n;[...$('ram').children].forEach(x=>x.classList.toggle('on',x===b));render()};$('ram').appendChild(b)});
+
+const r=raw(); gpu=match(r);
+if(isPhone){$('gpuName').textContent='You are on a phone';$('gpuNote').textContent='Open this page on your PC, or pick a card below.'}
+else if(gpu){$('gpuName').textContent=gpu.label+(gpu.laptop?' (laptop)':'');$('gpuNote').textContent='detected from your browser'+(gpu.laptop?', laptop chips often have less memory':'')}
+else{$('gpuName').textContent='Could not detect';$('gpuNote').textContent=r?('browser reports: '+r.slice(0,90)):'your browser hides the card name, pick it below'}
+$('pick').onchange=e=>{const g=GPUS[e.target.value];if(!g)return;gpu={label:g[1],ult:!!g[2],vram:g[3],laptop:false};$('gpuName').textContent=g[1];$('gpuNote').textContent='picked by you';render()};
+$('copyBtn').onclick=()=>{navigator.clipboard.writeText($('cmd').textContent).then(()=>{$('copyBtn').textContent='copied'})};
+
+function row(state,title,text,why){const cls={ok:'ok',no:'no',mb:'mb'}[state],lab={ok:'YES',no:'NO',mb:'MAYBE'}[state];
+ return `<div class="row"><span class="b ${cls}">${lab}</span><div><b>${title}</b><span class="sub">${text}</span>${why&&why.length?'<ul class="why">'+why.map(w=>'<li>'+w+'</li>').join('')+'</ul>':''}</div></div>`}
+function render(){
+ let h='';
+ const osOk=isPhone?null:(isWin?true:false);
+ // boot
+ let bw=[],bs='ok';
+ if(osOk===false){bs='no';bw.push('VIctory runs on Windows 10/11 only')}
+ if(!gpu){bs=bs==='no'?'no':'mb';bw.push('pick your card to finish the check')}
+ else if(/integrated|Apple/.test(gpu.label)){bs='no';bw.push('needs a dedicated DirectX 12 card')}
+ h+=row(bs,'Boot to the menus','Windows 10/11 x64, AVX2 CPU, DirectX 12 card',bw);
+ // world
+ let ww=[],ws='ok';
+ if(bs==='no')ws='no';
+ if(gpu&&!gpu.ult){ws='no';ww.push(gpu.label+' is not DirectX 12 Ultimate (no mesh shaders). minimum class: RTX 20, RX 6000, Intel Arc')}
+ if(gpu&&gpu.ult){const mx=vramNum(gpu.vram),mn=vramMin(gpu.vram);
+   if(mx<16){ws='no';ww.push(gpu.vram+' GB video memory, the AMD fork used more than a 16 GB card has')}
+   else if(mn<16){if(ws==='ok')ws='mb';ww.push('only the 16 GB version of this card has enough video memory')}
+   else if(mx===16){ww.push('16 GB works, but the AMD fork already went past it, expect it to be tight')}}
+ if(!gpu&&ws!=='no')ws='mb';
+ if(ram===null){if(ws!=='no')ws='mb';ww.push('tap your RAM above')}
+ else if(ram<32){ws='no';ww.push(ram+' GB RAM, the AMD fork used about 22 GB on its own, aim for 32 GB or more')}
+ h+=row(ws,'Load into the open world','DX12 Ultimate card, 16 GB+ video memory, 32 GB+ RAM, big page file',ww);
+ // play
+ h+=row('no','Actually play','nobody can yet: 3 to 5 fps on an RX 9070 XT with 64 GB RAM (Nov 25)',[]);
+ $('rows').innerHTML=h;
+}
+render();
+</script>
+</body>
+</html>
